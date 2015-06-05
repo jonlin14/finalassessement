@@ -1,0 +1,67 @@
+<?php
+
+function dna_menu() {
+  $items['dna'] = array(
+    'title' => 'DNA Pairer',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('dna_form'),
+    'access callback' => TRUE,
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  $items['success'] = array(
+    'title' => 'DNA Redirect',
+    'page callback' => 'dna_form_success',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+function dna_form() {
+  $form['string'] = array(
+    '#title' => 'Enter your DNA String',
+    '#type' => 'textfield',
+    '#description' => t('Enter your DNA String'),
+    '#element_validate' => array('element_validate_letters'),
+    '#required' => TRUE,
+    // Need to validate this form
+  );
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => 'Enter',
+  );
+  return $form;
+}
+
+function dna_form_submit($form, &$form_state) {
+  $_SESSION['input'] = $form_state['values']['string'];
+  $_SESSION['output'] = full_helix($form_state['values']['string'] );
+  $form_state['redirect'] = 'success';
+}
+
+function dna_form_success() {
+  $return_this = 'Helix 1:  ' . $_SESSION['input'] . '</br>' . 'Helix 2:  ' . $_SESSION['output'];
+  return $return_this;
+}
+function full_helix($input_string) {
+  $assoc = ['A' => 'T', 'T' => 'A', 'C' => 'G', 'G' => 'C'];
+  $builder_string = '';
+  $splitted = str_split($input_string);
+
+  foreach($splitted as $element) {
+    $builder_string .= $assoc[$element];
+    }
+  return $builder_string;
+}
+
+function element_validate_letters($element) {
+  $input = $element['#value'];
+  $assoc = ['A', 'T', 'G', 'C'];
+
+  for ($i = 0; $i < strlen($input); $i++ ) {
+    if (!in_array($input[$i], $assoc)) {
+      form_error($element, t('Please enter a string of only ATCGs'));
+    }
+  }
+}

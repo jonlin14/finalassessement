@@ -1,0 +1,7 @@
+name = DNA Module
+description = Module that presents a form to recieve one part of the DNA pair and matches it up with the other pair
+package = Epicodus Examples
+core = 7.x
+files[] = dna.module
+files[] = dna.test
+dependencies[] = simpletest

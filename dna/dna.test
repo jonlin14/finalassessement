@@ -1,0 +1,54 @@
+<?php
+
+
+
+class DnaTestCase extends DrupalUnitTestCase
+{
+  public static function getInfo() {
+    return array(
+      'name' => 'DNA Tests',
+      'description' => 'Test the DNA module',
+      'group' => 'DNA Tests',
+    );
+  }
+  function testFullHelix()
+  {
+    $description = 'A string of A should return T';
+    $input = 'A';
+    $result = full_helix($input);
+    $expected = 'T';
+    $this->assertEqual($result, $expected, $description);
+
+    $description = 'A string of AT should return TA';
+    $input = 'AT';
+    $result = full_helix($input);
+    $expected = 'TA';
+    $this->assertEqual($result, $expected, $description);
+
+    $description = 'A string of C should return a G';
+    $input = 'C';
+    $result = full_helix($input);
+    $expected = 'G';
+    $this->assertEqual($result, $expected, $description);
+
+    $description = 'A string of G should return a C';
+    $input = 'G';
+    $result = full_helix($input);
+    $expected = 'C';
+    $this->assertEqual($result, $expected, $description);
+
+    $description = 'A string of GC should return a CG';
+    $input = 'GC';
+    $result = full_helix($input);
+    $expected = 'CG';
+    $this->assertEqual($result, $expected, $description);
+
+    $description = 'A string of ATGC should return a TACG';
+    $input = 'ATGC';
+    $result = full_helix($input);
+    $expected = 'TACG';
+    $this->assertEqual($result, $expected, $description);
+  }
+
+
+}
